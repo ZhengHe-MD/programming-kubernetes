@@ -7,6 +7,7 @@ metadata:
     app.kubernetes.io/part-of: cnat-kubebuilder
     app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/created-by: cnat-kubebuilder
-  name: at-sample
+  name: example-at
 spec:
-  # TODO(user): Add fields here
+  schedule: "2023-04-30T08:01:00Z"
+  command: "echo HEY"
