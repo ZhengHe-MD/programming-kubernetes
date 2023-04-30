@@ -2,6 +2,10 @@ package main
 
 import (
 	"flag"
+	"os"
+	"path/filepath"
+	"time"
+
 	clientset "github.com/ZhengHe-MD/programming-kubernetes/cnat-client-go/pkg/generated/clientset/versioned"
 	informers "github.com/ZhengHe-MD/programming-kubernetes/cnat-client-go/pkg/generated/informers/externalversions"
 	"k8s.io/apimachinery/pkg/util/wait"
@@ -10,9 +14,6 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/klog/v2"
-	"os"
-	"path/filepath"
-	"time"
 )
 
 var (

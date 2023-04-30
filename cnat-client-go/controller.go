@@ -3,6 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"reflect"
+	"strings"
+	"time"
+
 	cnatv1alpha1 "github.com/ZhengHe-MD/programming-kubernetes/cnat-client-go/pkg/apis/cnat/v1alpha1"
 	clientset "github.com/ZhengHe-MD/programming-kubernetes/cnat-client-go/pkg/generated/clientset/versioned"
 	"github.com/ZhengHe-MD/programming-kubernetes/cnat-client-go/pkg/generated/informers/externalversions/cnat/v1alpha1"
@@ -19,9 +23,6 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog/v2"
-	"reflect"
-	"strings"
-	"time"
 )
 
 type Controller struct {
@@ -184,8 +185,8 @@ func (c *Controller) syncHandler(key string) (time.Duration, error) {
 		d, err := timeUntilSchedule(instance.Spec.Schedule)
 		if err != nil {
 			utilruntime.HandleError(fmt.Errorf("schedule parsing failed: %v", err))
-			// Error reading the schedule - forget the request.
-			return time.Duration(0), nil
+			// Error reading the schedule, wait until it is fixed.
+			return time.Duration(0), err
 		}
 		klog.Infof("instance %s: schedule parsing done: diff=%v", key, d)
 		if d > 0 {
