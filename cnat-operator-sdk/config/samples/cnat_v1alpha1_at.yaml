@@ -9,4 +9,5 @@ metadata:
     app.kubernetes.io/created-by: cnat-operator-sdk
   name: at-sample
 spec:
-  # TODO(user): Add fields here
+  schedule: "2023-05-01T01:26:00Z"
+  command: "echo HEY"
