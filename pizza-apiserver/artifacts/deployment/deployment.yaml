@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pizza-apiserver
+  namespace: pizza-apiserver
+  labels:
+    apiserver: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      apiserver: "true"
+  template:
+    metadata:
+      labels:
+        apiserver: "true"
+    spec:
+      serviceAccountName: apiserver
+      containers:
+        - name: apiserver
+          image: docker.io/zhenghe1992/pizza-apiserver:latest
+          imagePullPolicy: Always
+          command: ["/pizza-apiserver"]
+          args:
+            - --etcd-servers=http://localhost:2379
+            - --cert-dir=/tmp/certs
+            - --secure-port=8443
+        - name: etcd
+          image: docker.io/bitnami/etcd:latest
+          workingDir: /tmp
+          env:
+          - name: ALLOW_NONE_AUTHENTICATION
+            value: "yes"
