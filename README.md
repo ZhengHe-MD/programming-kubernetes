@@ -6,10 +6,10 @@ This repo contains runnable examples from the book [Programming Kubernetes](http
 
 tested on:
 
-| name | version |
-| ---- | ------- |
-| go | 1.20 |
-| kubernetes | v1.25.2 |
-| kubebuilder | 3.10.0 |
-| operator-sdk | v1.28.1 |
+| name           | version |
+|----------------|---------|
+| go             | 1.20    |
+| kubernetes     | v1.25.2 |
+| kubebuilder    | 3.10.0  |
+| operator-sdk   | v1.28.1 |
 | code-generator | v0.27.1 |
