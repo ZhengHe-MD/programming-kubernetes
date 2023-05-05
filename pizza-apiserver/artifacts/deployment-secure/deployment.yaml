@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pizza-apiserver
+  namespace: pizza-apiserver
+  labels:
+    apiserver: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      apiserver: "true"
+  template:
+    metadata:
+      labels:
+        apiserver: "true"
+        version: "2"
+    spec:
+      serviceAccountName: apiserver
+      containers:
+      - name: apiserver
+        image: docker.io/zhenghe1992/pizza-apiserver:latest
+        imagePullPolicy: IfNotPresent
+        command: ["/pizza-apiserver"]
+        args:
+        - --etcd-servers=http://localhost:2379
+        - --cert-dir=/tmp/certs
+        - --secure-port=8443
+        - --tls-cert-file=/var/run/apiserver/serving-cert/tls.crt
+        - --tls-private-key-file=/var/run/apiserver/serving-cert/tls.key
+        volumeMounts:
+        - name: serving-cert
+          readOnly: true
+          mountPath: /var/run/apiserver/serving-cert
+      - name: etcd
+        image: docker.io/bitnami/etcd:latest
+        imagePullPolicy: IfNotPresent
+        workingDir: /tmp
+        env:
+        - name: ALLOW_NONE_AUTHENTICATION
+          value: "yes"
+      volumes:
+      - name: serving-cert
+        secret:
+          secretName: serving-cert

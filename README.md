@@ -14,3 +14,4 @@ tested on:
 | kubebuilder    | v3.10.0 |
 | operator-sdk   | v1.28.1 |
 | code-generator | v0.27.1 |
+| openssl        | v3.1.0  |
