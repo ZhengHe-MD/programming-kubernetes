@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/ZhengHe-MD/programming-kubernetes/pizza-crd/pkg/webhook/admission"
+
 	"github.com/ZhengHe-MD/programming-kubernetes/pizza-crd/pkg/generated/clientset/versioned"
 	restaurantinformers "github.com/ZhengHe-MD/programming-kubernetes/pizza-crd/pkg/generated/informers/externalversions"
 	"github.com/ZhengHe-MD/programming-kubernetes/pizza-crd/pkg/webhook/conversion"
@@ -90,12 +92,8 @@ func main() {
 	restaurantInformers := restaurantinformers.NewSharedInformerFactory(clientset, time.Minute*5)
 	mux := http.NewServeMux()
 	mux.Handle("/convert/v1beta1/pizza", http.HandlerFunc(conversion.Serve))
-	mux.Handle("/admit/v1beta1/pizza", http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		writer.WriteHeader(http.StatusOK)
-	}))
-	mux.Handle("/validate/v1beta1/pizza", http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		writer.WriteHeader(http.StatusOK)
-	}))
+	mux.Handle("/admit/v1beta1/pizza", http.HandlerFunc(admission.ServePizzaAdmit))
+	mux.Handle("/validate/v1beta1/pizza", http.HandlerFunc(admission.ServePizzaValidation(restaurantInformers)))
 	restaurantInformers.Start(stopCh)
 
 	if doneCh, _, err := cfg.SecureServing.Serve(mux, time.Second*30, stopCh); err != nil {
